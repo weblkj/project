@@ -1,0 +1,110 @@
+<div class="item">
+	<!-- 日期分类 -->
+	<div class="mark">{{date}}</div>
+	<ul class="posts large">
+		<!-- 文章 -->
+		<li ng-repeat="post in posts">
+			<span href="javascript:;" class="tag">{{post.column.name}}</span>
+			<div class="cont">
+				<h3>{{post.title}}</h3>
+				<div class="brief">
+					<!-- 下面包含三种结构 -->
+					
+					<!-- 第一种  只有文字p display_style=10001 {{对象.abstract}}-->
+					<p ng-class="{only:post.display_style==10001}" ng-if="post.display_style!=10003">{{post.abstract}}</p>
+					
+					<!-- 第二种  左侧文字  右侧图 display_style=10002-->
+					<div class="thumb" ng-if="post.display_style==10002">
+						<img src="{{post.thumbs[0].small.url}}" alt="">
+					</div> 
+					
+					<!-- 第三种  只有图img display_style=10003-->
+					<div class="gallery" ng-if="post.display_style==10003">
+						<img src="{{post.thumbs[0].small.url}}" alt="">
+					</div>
+				</div>							
+			</div>
+		</li>
+		<!-- <li>
+			<span href="javascript:;" class="tag">去远方</span>
+			<div class="cont">
+				<h3>朝圣山南扎央宗-探索藏文化之源探索藏文化之源</h3>
+				<div class="brief">
+					<p class="only">那里有个很窄的洞，钻进去曾是莲花生大师修行的地方，在藏民心中钻洞是那里有个很窄的洞，钻进去曾是莲花生大师修行的地方，在藏民心中钻洞是为了洗清中钻洞是那里有个很窄的洞，钻进去曾是莲花生大师修行的地方</p>
+				</div>							
+			</div>
+		</li>
+		<li>
+			<span href="javascript:;" class="tag">去远方</span>
+			<div class="cont">
+				<h3>朝圣山南扎央宗--探索藏文化之源探索藏文化之源探索藏文化之源</h3>
+				<div class="brief">
+					<p>那里有个很窄的洞，钻进去曾是莲花生大师修行的地方，在藏民心中钻洞是为了洗清</p>
+					<div class="thumb">
+						<img src="./uploads/post_1.png" alt="">
+					</div>
+				</div>							
+			</div>
+		</li>
+		<li>
+			<span href="javascript:;" class="tag">去远方</span>
+			<div class="cont">
+				<h3>朝圣山南扎央宗--探索藏文化之源</h3>
+				<div class="brief">
+					
+					<div class="gallery">
+						<img src="./uploads/post_2.png" alt="">
+					</div>
+				</div>							
+			</div>
+		</li>
+		<li>
+			<span href="javascript:;" class="tag">去远方</span>
+			<div class="cont">
+				<h3>朝圣山南扎央宗--探索藏文化之源探索藏文化之源探索藏文化之源</h3>
+				<div class="brief">
+					<p>那里有个很窄的洞，钻进去曾是莲花生大师修行的地方，在藏民心中钻洞是为了洗清</p>
+					<div class="thumb">
+						<img src="./uploads/post_1.png" alt="">
+					</div>
+				</div>							
+			</div>
+		</li>
+		<li>
+			<span href="javascript:;" class="tag">去远方</span>
+			<div class="cont">
+				<h3>朝圣山南扎央宗--探索藏文化之源探索藏文化之源探索藏文化之源</h3>
+				<div class="brief">
+					<p>那里有个很窄的洞，钻进去曾是莲花生大师修行的地方，在藏民心中钻洞是为了洗清</p>
+					<div class="thumb">
+						<img src="./uploads/post_1.png" alt="">
+					</div>
+				</div>							
+			</div>
+		</li>
+		<li>
+			<span href="javascript:;" class="tag">去远方</span>
+			<div class="cont">
+				<h3>朝圣山南扎央宗--探索藏文化之源探索藏文化之源探索藏文化之源</h3>
+				<div class="brief">
+					<p>那里有个很窄的洞，钻进去曾是莲花生大师修行的地方，在藏民心中钻洞是为了洗清</p>
+					<div class="thumb">
+						<img src="./uploads/post_1.png" alt="">
+					</div>
+				</div>							
+			</div>
+		</li>
+		<li>
+			<span href="javascript:;" class="tag">去远方</span>
+			<div class="cont">
+				<h3>朝圣山南扎央宗--探索藏文化之源探索藏文化之源探索藏文化之源</h3>
+				<div class="brief">
+					<p>那里有个很窄的洞，钻进去曾是莲花生大师修行的地方，在藏民心中钻洞是为了洗清</p>
+					<div class="thumb">
+						<img src="./uploads/post_1.png" alt="">
+					</div>
+				</div>							
+			</div>
+		</li> -->
+	</ul>
+</div>
