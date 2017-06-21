@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>江苏体彩刮奖</title>
+	<script src="./jquery.min.js"></script>
+	<style>
+		*{
+			padding: 0;
+			margin: 0;
+		}
+		.ggl{
+			position: relative;
+			width: 85.6%;
+			height: 90px;
+			background:url(ggl.png) no-repeat center center;
+			background-size: 31.5% 100%;
+		}
+		.canvas{
+			position: absolute;
+			top: 2px;
+			left: 35%;
+			width: 30%;
+			height: 82px;
+			line-height: 82px;
+			text-align: center;
+			z-index:2;
+		}
+		.info{
+			position: absolute;
+			top: 2px;
+			width: 30%;
+			left: 35%;
+			text-align: center;
+			height: 82px;
+		}
+		.info span{
+			display: block;
+			font-size: 18px;
+		}
+		#prompt{
+			line-height: 40px;
+			z-index: 3;
+		}
+		.btn{
+			position: relative;
+			width: 50%;
+			height: 35px;
+			line-height: 35px;
+			background: #df412b;
+			color: #fff;
+			border-radius: 6px;
+			margin: 0 auto;
+			z-index:1;
+		}
+		.num{
+			width: 100%;
+			height: 20px;
+			line-height: 20px;
+			text-align: center;
+			font-size: 14px;
+		}
+		#ok,#no{
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<!-- 刮开后看到里面的中奖内容 -->
+	<div id="top" class="ggl">
+		<div id="prize" class="info">
+			<span id="prompt"></span>
+			<span class="btn" id="ok">领取奖品</span>
+			<span class="btn" id="no">再来一次</span>
+		</div>
+		<canvas id='canvas1' class='canvas'></canvas>
+	</div>
+	<!-- 剩下的刮奖次数 -->
+	<div class="num">
+		剩余抽奖次数：<span class='num1'></span>
+	</div>
+	<script>
+	//第一步
+		var c1;
+		var ctx;
+		var ismousedown;//表示用户是否按下鼠标
+		var isok;//表示是否已经刮了一半
+	//第二步
+	//页面加载初始化
+	window.onload = function(){
+           //获取画布
+			c1 = document.getElementById('canvas1');
+			//获取绘制环境
+			ctx = c1.getContext("2d");
+			//clientWidth  是窗口的可见宽度 会随着窗口的显示大小改变
+			//设置宽高  clientWidth  clientHeight
+			c1.width = c1.clientWidth;
+			c1.height = c1.clientHeight;
+			
+			//绑定事件监听函数	eventMove eventDown  eventUp
+			c1.addEventListener('mousemove', eventMove);
+			c1.addEventListener('mousedown', eventDown);
+			c1.addEventListener('mouseup', eventUp);
+			//初始化
+			initCanvas();
+			initdd();
+		}
+	//第三步
+	//初始化画布,画紫色的矩形
+		function initCanvas(){
+			//在目标图像上显示源图像,为了再来一次显示
+			ctx.globalCompositeOperation = 'source-over';
+			//设置绘制颜色
+			ctx.fillStyle = 'purple';
+			//绘制实心矩形
+			ctx.fillRect(0, 0, c1.clientWidth, c1.clientHeight)
+			//绘制文字   font  textAlign  fillstyle  fillText
+			ctx.fill();
+
+
+			ctx.font = '30px Microsoft';
+			ctx.textAlign = 'center';
+			ctx.fillStyle = '#e602e6';
+			ctx.fillText ('用手指轻轻刮开',c1.width/2,c1.height/2);
+			ctx.globalCompositeOperation = 'destination-out';
+		}
+		//鼠标按下事件
+		function eventDown(e){
+			e.preventDefault();
+			ismousedown = true;
+		}
+		//鼠标弹起事件
+		function eventUp(e){
+			e.preventDefault();
+			//得到canvas的全部数据,返回ImageDate对象
+			// 该对象复制了画布指定的矩形的像素数据：GRBA(red green blue alpha)
+			var a = ctx.getImageData(0, 0, c1.width, c1.height);
+			console.log(a);
+			var j = 0;
+			for(var i = 0;i<a.data.length;i+=4){
+				if(a.data[i] == 0){
+					j++;
+				}
+			}
+			// 当被刮开的区域等于一半时,则可以开始处理结果
+			if(j>a.data.length/8){
+				isok = 1;
+			}
+			//设置ismousedown为false
+			ismousedown = false;
+		}
+		//鼠标移动事件
+		function eventMove(e){
+			e.preventDefault();
+			//如果ismousedown 为true 表示鼠标已经按下
+			if(ismousedown == true){
+			var offsetX = c1.offsetLeft;
+			var offsetY = c1.offsetTop;
+			var x = (e.clientX + document.body.scrollLeft-offsetX || e.pageX || 0);
+			var y = (e.clientY + document.body.scrollTop-offsetY || e.pageY || 0);
+			//画圆形
+			ctx.beginPath();
+			ctx.arc(x, y, 32, 0, Math.PI*2, true);
+			ctx.fill();		
+			}	
+			//isok 为true就停止判断
+			if(isok == true){
+				//找class为btn的span  保存在btn中
+				var btn = document.getElementsByClassName('btn');
+				//遍历btn
+				for(var i = 0;i<btn.length;i++){
+					//将btn[i]的zIndex属性设置为3
+					btn[i].style.zIndex = '3';
+				}
+			}
+		}
+		//控制刮卡次数
+		var t = 1;
+		// 初始化所有数据并且随机中奖概率
+		var initdd = function(){
+			//剩余刮卡次数
+			$('.num1').html(4-t);
+			//生成随机数
+			function getRandomNum(a,b){
+				return (Math.floor(Math.random()*(b-a)+a));
+			}
+			var r = getRandomNum(1,100);
+			//把btn的zIndex设置回1
+			var btn = document.getElementsByClassName('btn');
+			for(var i = 0;i<btn.length;i++){
+				btn[i].style.zIndex = '1';
+			}
+			//找到id为ok的span将它隐藏
+			document.getElementById('ok').style.display = 'none';
+			//找到id为no的span将它隐藏
+			document.getElementById('no').style.display = 'none';
+			//控制中奖概率
+			isok = 0;
+			if(r<t*2){
+				//获得id为prompt的内容 设置中奖了
+				$('#prompt').html('恭喜抽中iPhone 7 Pluse');				
+				//id为ok的span显示出来  领取奖品
+				$('#ok').css('display','block');
+				//点击领取奖品  id为ok的span添加事件  click 
+				$('#ok').click(function(){
+					alert('奖品已领取完');
+				});
+			}else{
+				//把id为prompt的内容设置为 '未中奖'
+				$('#prompt').html('很遗憾，未中奖');
+				//再把id为no的span显示出来
+				$('#no').css('display','block');
+			}
+		}
+		//没有中奖再来一次
+		$('#no').click(function(){
+			if(t>3){
+				alert('您的次数已经用完');
+			}else{
+				t++;
+				//初始化按钮
+				$('#no').css('display','none');
+				$('#ok').css('display','none');
+				window.onload();
+				initCanvas();
+			}
+		})
+	</script>
+</body>
+</html>
